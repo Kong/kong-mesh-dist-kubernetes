@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicea
+spec:
+  selector:
+    matchLabels:
+      app: servicea
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: servicea
+    spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox
+        env:
+        - name: KONG_PG_HOST
+          value: postgres
+        - name: KONG_PG_PORT
+          value: "5432"
+        command: [ "/bin/sh", "-c", "until nc -zv $KONG_PG_HOST $KONG_PG_PORT -w1; do echo 'waiting for db'; sleep 1; done" ]
+      - name: setup-network
+        image: istio/proxy_init:1.0.4
+        args: [ "-p", "7000", "-u", "1337", "-m", "TPROXY", "-i", "*"]
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+      containers:
+      - name: servicea
+        image: itsthenetwork/alpine-ncat
+        command: [ "watch" ]
+        args: [ "echo `date` | ncat serviceb 8080"]
+      - name: kong
+        image: kong:mesh
+        securityContext:
+          capabilities:
+            add:
+            - NET_RAW
+        env:
+          - name: KONG_LOG_LEVEL
+            value: debug
+          - name: KONG_STREAM_LISTEN
+            value: "0.0.0.0:7000 transparent"
+          - name: KONG_PROXY_LISTEN
+            value: "0.0.0.0:8000, 0.0.0.0:8443 ssl"
+          - name: KONG_ADMIN_LISTEN
+            value: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+          - name: KONG_PG_PASSWORD
+            value: kong
+          - name: KONG_PG_HOST
+            value: postgres
+          - name: KONG_PROXY_ACCESS_LOG
+            value: "/dev/stdout"
+          - name: KONG_ADMIN_ACCESS_LOG
+            value: "/dev/stdout"
+          - name: KONG_PROXY_ERROR_LOG
+            value: "/dev/stderr"
+          - name: KONG_ADMIN_ERROR_LOG
+            value: "/dev/stderr"
+        ports:
+        - name: kongstream
+          containerPort: 7000
+          protocol: TCP
+        - name: kongproxy
+          containerPort: 8000
+          protocol: TCP
+        - name: kongproxyssl
+          containerPort: 8443
+          protocol: TCP
+        - name: kongadmin
+          containerPort: 8001
+          protocol: TCP
+        - name: kongadminssl
+          containerPort: 8443
+          protocol: TCP
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kong-config
+spec:
+  template:
+    metadata:
+      name: kong-config
+    spec:
+      containers:
+      - name: kong-config
+        image: kong:config
+      restartPolicy: OnFailure
+

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serviceb
+spec:
+  selector:
+    matchLabels:
+      app: serviceb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: serviceb
+    spec:
+      containers:
+      - name: serviceb
+        image: itsthenetwork/alpine-ncat
+        args: ["--listen", "--keep-open", "--verbose", "8080"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceb
+spec:
+  type: NodePort
+  ports:
+  - name: serviceb
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: serviceb
