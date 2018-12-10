@@ -34,7 +34,7 @@ spec:
         command: [ "watch" ]
         args: [ "echo `date` | ncat serviceb 8080"]
       - name: kong
-        image: kong:mesh
+        image: mashape/kong-enterprise:mesh
         securityContext:
           capabilities:
             add:
@@ -89,6 +89,6 @@ spec:
     spec:
       containers:
       - name: kong-config
-        image: kong:config
+        image: mashape/kong-enterprise:mesh-config
       restartPolicy: OnFailure
 
