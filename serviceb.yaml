@@ -23,6 +23,8 @@ spec:
         command: [ "/bin/sh", "-c", "until nc -zv $KONG_PG_HOST $KONG_PG_PORT -w1; do echo 'waiting for db'; sleep 1; done" ]
       - name: setup-network
         image: istio/proxy_init:1.0.4
+        # TODO: This should be `-b *` and not `-b 8080`, the former results
+        # in DB connection failure in Kong.
         args: [ "-p", "7000", "-u", "1337", "-m", "TPROXY", "-i", "*", "-b", "8080"]
         securityContext:
           capabilities:
