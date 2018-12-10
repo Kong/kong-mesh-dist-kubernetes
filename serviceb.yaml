@@ -48,7 +48,7 @@ spec:
           - name: KONG_PROXY_LISTEN
             value: "0.0.0.0:8000, 0.0.0.0:8443 ssl"
           - name: KONG_ADMIN_LISTEN
-            value: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+            value: "off"
           - name: KONG_PG_PASSWORD
             value: kong
           - name: KONG_PG_HOST
