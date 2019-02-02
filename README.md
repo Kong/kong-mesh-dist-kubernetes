@@ -17,7 +17,7 @@ make setup_minikube
 ## Running
 
 ```
-make run
+make build-docker-images && make run
 ```
 
 Wait for things to be running
@@ -43,4 +43,10 @@ kubectl logs -l app=servicea -c kong
 2018/12/07 19:48:00 [info] 39#0: *18352 proxy 172.17.0.13:53774 connected to 10.100.100.10:8080
 2018/12/07 19:48:00 [info] 39#0: *18352 client disconnected, bytes from/to client:0/0, bytes from/to upstream:0/28
 172.17.0.13 [07/Dec/2018:19:48:00 +0000] TCP 200 0 0 0.000
+```
+
+## Terminating
+
+```
+make clean
 ```
