@@ -1,7 +1,6 @@
 - Use https://github.com/Kong/kong-dist-kubernetes to run Kong
-- Start a Service B that uses ncat to listen on 8080
-- Start a Service A that sends `date` to Service B
-- Start Kong as a mesh sidecar in the same pod as Service A
+- Start a Service B that uses ncat to listen on 8080 and a Kong sidecar
+- Start a Service A that sends `date` to Service B and a Kong sidecar
 - Configure Kong and the pod iptables to send all traffic transparently through Kong
 
 ## Prerequisites
