@@ -35,7 +35,7 @@ spec:
         image: itsthenetwork/alpine-ncat
         args: ["--listen", "--keep-open", "--verbose", "8080"]
       - name: kong
-        image: mashape/kong-enterprise:mesh
+        image: kong:1.0-centos
         securityContext:
           capabilities:
             add:

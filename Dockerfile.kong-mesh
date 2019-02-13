@@ -1,7 +1,0 @@
-FROM kong:1.0rc3-centos
-
-RUN useradd --uid 1337 kong
-
-RUN setcap cap_net_raw=+ep /usr/local/openresty/nginx/sbin/nginx
-
-COPY docker-entrypoint-mesh.sh /docker-entrypoint.sh

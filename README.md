@@ -17,17 +17,25 @@ make setup_minikube
 ## Running
 
 ```
-make build-docker-images && make run
+make run
+kubectl get deployment kong-rc
 ```
 
-Wait for things to be running
+Wait for the Kong control plane to be running
 ```
-kubectl get all
+kubectl get deployment kong-rc
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+kong-rc   3/3     3            3           6m19s
+```
+
+Run the two mock services
+```
+make run_services
 ```
 
 Service B logs
 ```
-kubectl logs -l app=serviceb
+kubectl logs -l app=serviceb -c serviceb
 Fri Dec 7 19:46:51 UTC 2018
 Ncat: Connection from 172.17.0.1.
 Ncat: Connection from 172.17.0.1:53192.
