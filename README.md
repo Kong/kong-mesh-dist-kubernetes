@@ -8,7 +8,8 @@
 - kubectl
 - access to a Kubernetes cluster
 
-If you're running Linux and have docker installed you can use the Make task to install minikube
+If you're running Linux and have docker installed you can use the Make task to install minikube.
+*WARNING* the Make task will delete / recreate a minikube cluster with `--vm-driver none`
 ```
 make setup_minikube
 ```

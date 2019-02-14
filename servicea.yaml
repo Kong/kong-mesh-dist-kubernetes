@@ -34,7 +34,7 @@ spec:
         command: [ "watch" ]
         args: [ "echo `date` | ncat serviceb 8080"]
       - name: kong
-        image: kong:1.0-centos
+        image: kong
         securityContext:
           capabilities:
             add:
