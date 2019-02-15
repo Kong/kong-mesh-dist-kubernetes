@@ -1,7 +1,6 @@
 - Use https://github.com/Kong/kong-dist-kubernetes to run Kong
-- Start a Service B that uses ncat to listen on 8080
-- Start a Service A that sends `date` to Service B
-- Start Kong as a mesh sidecar in the same pod as Service A
+- Start a Service B that uses ncat to listen on 8080 and a Kong sidecar
+- Start a Service A that sends `date` to Service B and a Kong sidecar
 - Configure Kong and the pod iptables to send all traffic transparently through Kong
 
 ## Prerequisites
@@ -9,7 +8,8 @@
 - kubectl
 - access to a Kubernetes cluster
 
-If you're running Linux and have docker installed you can use the Make task to install minikube
+If you're running Linux and have docker installed you can use the Make task to install minikube.
+*WARNING* the Make task will delete / recreate a minikube cluster with `--vm-driver none`
 ```
 make setup_minikube
 ```
@@ -17,17 +17,25 @@ make setup_minikube
 ## Running
 
 ```
-make build-docker-images && make run
+make run
+kubectl get deployment kong-rc
 ```
 
-Wait for things to be running
+Wait for the Kong control plane to be running
 ```
-kubectl get all
+kubectl get deployment kong-rc
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+kong-rc   3/3     3            3           6m19s
+```
+
+Run the two mock services
+```
+make run_services
 ```
 
 Service B logs
 ```
-kubectl logs -l app=serviceb
+kubectl logs -l app=serviceb -c serviceb
 Fri Dec 7 19:46:51 UTC 2018
 Ncat: Connection from 172.17.0.1.
 Ncat: Connection from 172.17.0.1:53192.
