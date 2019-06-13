@@ -18,14 +18,14 @@ make setup_minikube
 
 ```
 make run
-kubectl get deployment kong-rc
+kubectl get deployment kong
 ```
 
 Wait for the Kong control plane to be running
 ```
-kubectl get deployment kong-rc
+kubectl get deployment kong
 NAME      READY   UP-TO-DATE   AVAILABLE   AGE
-kong-rc   3/3     3            3           6m19s
+kong   3/3     3            3           6m19s
 ```
 
 Run the two mock services

@@ -89,6 +89,6 @@ spec:
     spec:
       containers:
       - name: kong-config
-        image: kong:mesh-config
+        image: localhost:5000/kong-mesh-config
       restartPolicy: OnFailure
 
