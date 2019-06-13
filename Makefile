@@ -5,6 +5,8 @@ setup_minikube:
 	sudo minikube addons enable registry
 	sudo chown -R $$USER $$HOME/.minikube
 	sudo chgrp -R $$USER $$HOME/.minikube
+	sudo chown -R $$USER $$HOME/.kube
+	sudo chgrp -R $$USER $$HOME/.kube
 	sudo minikube update-context
 	until kubectl get nodes 2>&1 | sed -n 2p | grep -q Ready; do sleep 1 && kubectl get nodes; done
 	kubectl create -f kube-registry.yaml
@@ -22,8 +24,6 @@ run:
 	kubectl apply -f https://raw.githubusercontent.com/Kong/kong-dist-kubernetes/master/minikube/kong_postgres.yaml
 
 run_services:
-	docker build --no-cache -t localhost:5000/kong-mesh-config -f Dockerfile.kong-config .
-	docker push localhost:5000/kong-mesh-config
 	kubectl apply -f serviceb.yaml
 	kubectl apply -f servicea.yaml
 

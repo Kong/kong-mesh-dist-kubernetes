@@ -89,6 +89,6 @@ spec:
     spec:
       containers:
       - name: kong-config
-        image: localhost:5000/kong-mesh-config
+        image: hutchic/kong-mesh-config
       restartPolicy: OnFailure
 
