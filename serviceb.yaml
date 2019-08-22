@@ -77,7 +77,7 @@ spec:
           containerPort: 8001
           protocol: TCP
         - name: kongadminssl
-          containerPort: 8443
+          containerPort: 8444
           protocol: TCP
 
 ---
